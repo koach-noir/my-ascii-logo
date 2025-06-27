@@ -1,0 +1,36 @@
+{
+  "name": "my-ascii-logo",
+  "version": "1.0.0",
+  "description": "Custom ASCII art logo generator with colorful gradients",
+  "type": "module",
+  "main": "logo-cli.js",
+  "bin": {
+    "my-logo": "./logo-cli.js"
+  },
+  "scripts": {
+    "start": "node logo-cli.js",
+    "demo": "node logo-cli.js 'DEMO' fire",
+    "test": "node logo-cli.js 'TEST' matrix"
+  },
+  "keywords": [
+    "ascii",
+    "art",
+    "logo",
+    "gradient",
+    "terminal",
+    "cli",
+    "figlet"
+  ],
+  "author": "koach-noir",
+  "license": "MIT",
+  "dependencies": {
+    "figlet": "^1.7.0",
+    "gradient-string": "^2.0.2"
+  },
+  "devDependencies": {
+    "@types/figlet": "^1.5.8"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
