@@ -1,7 +1,7 @@
 {
   "name": "my-ascii-logo",
   "version": "1.0.0",
-  "description": "Custom ASCII art logo generator with colorful gradients",
+  "description": "Stylish ASCII art logo generator with oh-my-logo style filled blocks",
   "type": "module",
   "main": "logo-cli.js",
   "bin": {
@@ -9,8 +9,9 @@
   },
   "scripts": {
     "start": "node logo-cli.js",
-    "demo": "node logo-cli.js 'DEMO' fire",
-    "test": "node logo-cli.js 'TEST' matrix"
+    "demo": "node logo-cli.js 'DEMO' fire --filled",
+    "test": "node logo-cli.js 'TEST' matrix --filled",
+    "filled-demo": "node logo-cli.js 'STYLISH' sunset --filled"
   },
   "keywords": [
     "ascii",
@@ -19,16 +20,24 @@
     "gradient",
     "terminal",
     "cli",
-    "figlet"
+    "figlet",
+    "ink",
+    "filled",
+    "oh-my-logo"
   ],
   "author": "koach-noir",
   "license": "MIT",
   "dependencies": {
     "figlet": "^1.7.0",
-    "gradient-string": "^2.0.2"
+    "gradient-string": "^2.0.2",
+    "ink": "^5.0.1",
+    "ink-big-text": "^2.0.0",
+    "ink-gradient": "^3.0.0",
+    "react": "^18.3.1"
   },
   "devDependencies": {
-    "@types/figlet": "^1.5.8"
+    "@types/figlet": "^1.5.8",
+    "@types/react": "^18.3.3"
   },
   "engines": {
     "node": ">=16.0.0"

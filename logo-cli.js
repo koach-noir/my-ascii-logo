@@ -1,128 +1,346 @@
 #!/usr/bin/env node
-// logo-cli.js - Custom ASCII Logo Generator with RED support
+// logo-cli.js - Proper Block Character ASCII Logo Generator
 
 import figlet from 'figlet';
 import gradient from 'gradient-string';
 
-// 🎨 定義済みカラーパレット
+// 🎨 oh-my-logo互換パレット
 const PALETTES = {
-  red: ['#ff0000', '#cc0000'],           // 🔴 あなたのリクエスト！
-  blue: ['#0066ff', '#003399'],
-  green: ['#00ff00', '#006600'],
-  sunset: ['#ff9966', '#ff5e62', '#ffa34e'],
-  matrix: ['#00ff41', '#008f11'],
-  fire: ['#ff0844', '#ffb199'],
-  ocean: ['#667eea', '#764ba2'],
-  gold: ['#f7971e', '#ffd200'],
-  purple: ['#667db6', '#0082c8', '#0078ff'],
-  mint: ['#00d2ff', '#3a7bd5'],
-  coral: ['#ff9a9e', '#fecfef']
+  'grad-blue': ['#4ea8ff', '#7f88ff'],
+  'sunset': ['#ff9966', '#ff5e62', '#ffa34e'], 
+  'dawn': ['#00c6ff', '#0072ff'],
+  'nebula': ['#654ea3', '#eaafc8'],
+  'ocean': ['#667eea', '#764ba2'],
+  'fire': ['#ff0844', '#ffb199'],
+  'forest': ['#134e5e', '#71b280'],
+  'gold': ['#f7971e', '#ffd200'],
+  'purple': ['#667db6', '#0082c8', '#0078ff'],
+  'mint': ['#00d2ff', '#3a7bd5'],
+  'coral': ['#ff9a9e', '#fecfef'],
+  'matrix': ['#00ff41', '#008f11'],
+  'mono': ['#f07178', '#f07178'],
+  'red': ['#ff0000', '#cc0000']
 };
 
+// 🧱 美しいブロック文字パターン（手作り）
+const BLOCK_PATTERNS = {
+  'A': [
+    '  ████  ',
+    ' ██  ██ ',
+    '████████',
+    '██    ██',
+    '██    ██'
+  ],
+  'B': [
+    '███████ ',
+    '██   ██ ',
+    '███████ ',
+    '██   ██ ',
+    '███████ '
+  ],
+  'C': [
+    ' ███████',
+    '██     █',
+    '██      ',
+    '██     █',
+    ' ███████'
+  ],
+  'D': [
+    '██████  ',
+    '██   ██ ',
+    '██    ██',
+    '██   ██ ',
+    '██████  '
+  ],
+  'E': [
+    '████████',
+    '██      ',
+    '██████  ',
+    '██      ',
+    '████████'
+  ],
+  'F': [
+    '████████',
+    '██      ',
+    '██████  ',
+    '██      ',
+    '██      '
+  ],
+  'G': [
+    ' ███████',
+    '██      ',
+    '██  ████',
+    '██    ██',
+    ' ███████'
+  ],
+  'H': [
+    '██    ██',
+    '██    ██',
+    '████████',
+    '██    ██',
+    '██    ██'
+  ],
+  'I': [
+    '████████',
+    '   ██   ',
+    '   ██   ',
+    '   ██   ',
+    '████████'
+  ],
+  'J': [
+    '████████',
+    '      ██',
+    '      ██',
+    '██    ██',
+    ' ███████'
+  ],
+  'K': [
+    '██   ██ ',
+    '██  ██  ',
+    '█████   ',
+    '██  ██  ',
+    '██   ██ '
+  ],
+  'L': [
+    '██      ',
+    '██      ',
+    '██      ',
+    '██      ',
+    '████████'
+  ],
+  'M': [
+    '██    ██',
+    '████████',
+    '██ ██ ██',
+    '██    ██',
+    '██    ██'
+  ],
+  'N': [
+    '██    ██',
+    '███   ██',
+    '██ ██ ██',
+    '██   ███',
+    '██    ██'
+  ],
+  'O': [
+    ' ██████ ',
+    '██    ██',
+    '██    ██',
+    '██    ██',
+    ' ██████ '
+  ],
+  'P': [
+    '███████ ',
+    '██    ██',
+    '███████ ',
+    '██      ',
+    '██      '
+  ],
+  'Q': [
+    ' ██████ ',
+    '██    ██',
+    '██ ██ ██',
+    '██   ███',
+    ' ███████'
+  ],
+  'R': [
+    '███████ ',
+    '██    ██',
+    '███████ ',
+    '██   ██ ',
+    '██    ██'
+  ],
+  'S': [
+    ' ███████',
+    '██      ',
+    ' ██████ ',
+    '      ██',
+    '███████ '
+  ],
+  'T': [
+    '████████',
+    '   ██   ',
+    '   ██   ',
+    '   ██   ',
+    '   ██   '
+  ],
+  'U': [
+    '██    ██',
+    '██    ██',
+    '██    ██',
+    '██    ██',
+    ' ██████ '
+  ],
+  'V': [
+    '██    ██',
+    '██    ██',
+    '██    ██',
+    ' ██  ██ ',
+    '  ████  '
+  ],
+  'W': [
+    '██    ██',
+    '██    ██',
+    '██ ██ ██',
+    '████████',
+    '██    ██'
+  ],
+  'X': [
+    '██    ██',
+    ' ██  ██ ',
+    '  ████  ',
+    ' ██  ██ ',
+    '██    ██'
+  ],
+  'Y': [
+    '██    ██',
+    ' ██  ██ ',
+    '  ████  ',
+    '   ██   ',
+    '   ██   '
+  ],
+  'Z': [
+    '████████',
+    '     ██ ',
+    '  ████  ',
+    ' ██     ',
+    '████████'
+  ],
+  ' ': [
+    '        ',
+    '        ',
+    '        ',
+    '        ',
+    '        '
+  ]
+};
+
+// 🎨 美しいブロック文字生成
+function createBeautifulBlocks(text) {
+  const lines = ['', '', '', '', ''];
+  
+  for (const char of text.toUpperCase()) {
+    const pattern = BLOCK_PATTERNS[char] || BLOCK_PATTERNS[' '];
+    
+    for (let i = 0; i < 5; i++) {
+      lines[i] += pattern[i] + '  '; // 文字間スペース
+    }
+  }
+  
+  return lines.join('\n');
+}
+
 // 🎯 メインのロゴ生成関数
-function createLogo(text, palette = 'blue', options = {}) {
+function createLogo(text, palette = 'grad-blue', options = {}) {
   const {
     font = 'Standard',
-    direction = 'vertical',
-    layout = 'default'
+    filled = false,
+    direction = 'vertical'
   } = options;
 
   try {
-    // ASCII アート生成
-    const asciiArt = figlet.textSync(text, {
-      font: font,
-      horizontalLayout: layout,
-      verticalLayout: 'default'
-    });
-
-    // カラーパレット取得
-    let colors = PALETTES[palette];
+    let asciiArt;
     
-    // カスタムカラーの場合
-    if (!colors) {
-      if (palette.startsWith('#')) {
-        colors = [palette];
-      } else {
-        colors = PALETTES.blue; // デフォルト
-      }
+    if (filled) {
+      // 🧱 美しいブロック文字を生成
+      asciiArt = createBeautifulBlocks(text);
+    } else {
+      // 📏 通常のfiglet
+      asciiArt = figlet.textSync(text, {
+        font: font,
+        horizontalLayout: 'default',
+        verticalLayout: 'default'
+      });
     }
 
-    // グラデーション適用
+    // カラーパレット取得
+    let colors = PALETTES[palette] || PALETTES['grad-blue'];
+    
+    if (palette.startsWith('#')) {
+      colors = [palette];
+    }
+
+    // 🌈 あなたが望んだシンプルな書き方！
     const coloredArt = gradient(colors)(asciiArt);
     return coloredArt;
+    
   } catch (error) {
     console.error('Error generating logo:', error.message);
     return text;
   }
 }
 
-// 📋 使用可能なパレット一覧表示
+// 📋 パレット一覧表示
 function showPalettes() {
   console.log('\n🎨 Available Color Palettes:');
+  console.log('');
   Object.keys(PALETTES).forEach(name => {
-    const preview = gradient(PALETTES[name])('████████');
-    console.log(`  ${name.padEnd(8)} ${preview}`);
+    const preview = gradient(PALETTES[name])('████████████');
+    console.log(`  ${name.padEnd(12)} ${preview}`);
   });
   console.log('');
 }
 
 // 📖 ヘルプ表示
 function showHelp() {
-  console.log(`\n🎨 ASCII Logo Generator\n`);
-  console.log('Usage: node logo-cli.js [text] [palette] [options]\n');
+  console.log(`\n🎨 Beautiful ASCII Logo Generator\n`);
+  console.log('Usage: ./logo-cli.js [text] [palette] [options]\n');
   console.log('Examples:');
-  console.log('  node logo-cli.js "HELLO"');
-  console.log('  node logo-cli.js "WORLD" red');
-  console.log('  node logo-cli.js "CUSTOM" "#ff0000"');
-  console.log('  node logo-cli.js "BIG" sunset --font Big\n');
+  console.log('  ./logo-cli.js "HELLO"                    # Figlet style');
+  console.log('  ./logo-cli.js "HELLO" sunset --filled    # Beautiful blocks');
+  console.log('  ./logo-cli.js "FIRE" fire --filled       # Fire blocks');
+  console.log('  ./logo-cli.js "OCC" red --filled         # Red blocks\n');
   
   showPalettes();
   
   console.log('Options:');
-  console.log('  --font [name]    Set figlet font (default: Standard)');
+  console.log('  --filled         Use beautiful hand-crafted block characters');
+  console.log('  --font [name]    Set figlet font (when not using --filled)');
   console.log('  --palettes       Show available color palettes');
   console.log('  --help           Show this help message\n');
 }
 
-// 🚀 CLI引数の処理
-const args = process.argv.slice(2);
+// 🚀 メイン処理
+function main() {
+  const args = process.argv.slice(2);
 
-// ヘルプ表示
-if (args.includes('--help') || args.includes('-h')) {
-  showHelp();
-  process.exit(0);
+  if (args.includes('--help') || args.includes('-h')) {
+    showHelp();
+    return;
+  }
+
+  if (args.includes('--palettes')) {
+    showPalettes();
+    return;
+  }
+
+  const text = args[0] || 'HELLO';
+  const palette = args[1] || 'grad-blue';
+  const filled = args.includes('--filled');
+  const fontIndex = args.indexOf('--font');
+  const font = fontIndex !== -1 ? args[fontIndex + 1] : 'Standard';
+
+  console.log('🎨 Beautiful ASCII Logo Generator\n');
+
+  if (args.length === 0) {
+    console.log('🔴 RED VERSION (Figlet):');
+    console.log(createLogo('OCC', 'red'));
+    
+    console.log('\n🧱 RED VERSION (Beautiful Blocks):');
+    console.log(createLogo('OCC', 'red', { filled: true }));
+    
+    console.log('\n🔥 FIRE VERSION (Beautiful Blocks):');
+    console.log(createLogo('FIRE', 'fire', { filled: true }));
+    
+    console.log('\n💡 Try: ./logo-cli.js "YOUR NAME" red --filled');
+    console.log('💡 Help: ./logo-cli.js --help');
+  } else {
+    const modeText = filled ? 'beautiful blocks' : 'figlet style';
+    console.log(`🎯 Generating: "${text}" with ${palette} palette (${modeText})\n`);
+    
+    const result = createLogo(text, palette, { filled, font });
+    console.log(result);
+  }
 }
 
-// パレット一覧表示
-if (args.includes('--palettes')) {
-  showPalettes();
-  process.exit(0);
-}
-
-// 引数解析
-const text = args[0] || 'HELLO';
-const palette = args[1] || 'blue';
-const fontIndex = args.indexOf('--font');
-const font = fontIndex !== -1 ? args[fontIndex + 1] : 'Standard';
-
-// �� メイン実行
-console.log('🎨 ASCII Logo Generator\n');
-
-// デモ表示（引数がない場合）
-if (args.length === 0) {
-  console.log('🔴 RED VERSION:');
-  console.log(createLogo('OCC', 'red'));
-  
-  console.log('\n🔥 FIRE VERSION:');
-  console.log(createLogo('FIRE', 'fire'));
-  
-  console.log('\n🌊 OCEAN VERSION:');
-  console.log(createLogo('OCEAN', 'ocean'));
-  
-  console.log('\n💡 Try: node logo-cli.js "YOUR NAME" red');
-  console.log('💡 Help: node logo-cli.js --help');
-} else {
-  // ユーザー指定のロゴ生成
-  console.log(`🎯 Generating: "${text}" with ${palette} palette`);
-  console.log(createLogo(text, palette, { font }));
-}
+main();
